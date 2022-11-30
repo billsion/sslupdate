@@ -25,15 +25,15 @@ class SSL
      *
      * @param string $file_path 文件路径
      *
-     * @return string 文件内容
-     *
      * @throws FileNotFoundException
+     *
+     * @return string 文件内容
      */
     private function __getSSLFile(string $file_path): string
     {
         $file_info = pathinfo($file_path);
-        if (! file_exists($file_path)) {
-            throw new FileNotFoundException($file_info['dirname'] . ' 目录下未找到后缀为' . $file_info['extension'] . '的文件');
+        if (!file_exists($file_path)) {
+            throw new FileNotFoundException($file_info['dirname'].' 目录下未找到后缀为'.$file_info['extension'].'的文件');
         }
 
         return file_get_contents($file_path);
@@ -44,19 +44,19 @@ class SSL
      *
      * @param array $domains 域名数组
      */
-    public function update(array $domains = null):array
+    public function update(array $domains = null): array
     {
         $cert_base_path = env('SSL_PATH');
 
         foreach ($domains as $domain) {
-            $saveCertName = $domain . date('Ymd');
+            $saveCertName = $domain.date('Ymd');
 
             try {
-                $sslPub = $this->__getSSLFile($cert_base_path . '/' . $domain . '/fullchain.pem');
-                $sslPri = $this->__getSSLFile($cert_base_path . '/' . $domain . '/privkey.pem');
+                $sslPub = $this->__getSSLFile($cert_base_path.'/'.$domain.'/fullchain.pem');
+                $sslPri = $this->__getSSLFile($cert_base_path.'/'.$domain.'/privkey.pem');
 
                 $request = Dcdn::v20180115()->batchSetDcdnDomainCertificate();
-                $result  = $request
+                $result = $request
                     ->withDomainName($domain)
                     ->withCertName($saveCertName)
                     ->withCertType('upload')
@@ -69,7 +69,7 @@ class SSL
                     ->request();
 
                 return $result->toArray();
-            } catch(FileNotFoundException $e) {
+            } catch (FileNotFoundException $e) {
                 Log::error($e->getMessage());
 
                 throw new \Exception($domain);
@@ -81,7 +81,7 @@ class SSL
                 Log::error($e->getMessage());
 
                 throw new \Exception($e->getMessage());
-            } catch(Exception $e) {
+            } catch (Exception $e) {
                 Log::error($e->getMessage());
 
                 throw new \Exception($e->getMessage());
@@ -93,12 +93,12 @@ class SSL
      * 根据关键字查找证书.
      *
      * @param string $keywords 关键字
-     * @param bool $force 是否强制调用阿里云 SDK 获取数据
+     * @param bool   $force    是否强制调用阿里云 SDK 获取数据
      */
     public function list(string $keywords = null, bool $force = false): array
     {
         try {
-            if (! $force && Storage::disk('local')->exists('domains.txt') && $contents = Storage::disk('local')->get('domains.txt')) {
+            if (!$force && Storage::disk('local')->exists('domains.txt') && $contents = Storage::disk('local')->get('domains.txt')) {
                 $domains = json_decode($contents, JSON_UNESCAPED_SLASHES && JSON_UNESCAPED_UNICODE);
 
                 return $domains['CertInfos']['CertInfo'];
@@ -124,7 +124,7 @@ class SSL
             Log::error($e->getMessage());
 
             throw new \Exception($e->getMessage());
-        } catch(Exception $e) {
+        } catch (Exception $e) {
             Log::error($e->getMessage());
 
             throw new \Exception($e->getMessage());
@@ -140,7 +140,7 @@ class SSL
     {
         try {
             $request = Dcdn::v20180115()->describeDcdnDomainCertificateInfo();
-            $result  = $request->withDomainName($domain)->debug(true)->request();
+            $result = $request->withDomainName($domain)->debug(true)->request();
 
             return $result->toArray();
         } catch (ClientException $e) {
@@ -151,7 +151,7 @@ class SSL
             Log::error($e->getMessage());
 
             throw new \Exception($e->getMessage());
-        } catch(Exception $e) {
+        } catch (Exception $e) {
             Log::error($e->getMessage());
 
             throw new \Exception($e->getMessage());

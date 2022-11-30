@@ -42,7 +42,7 @@ class FindCommand extends Command
                 throw new Exception('缺少参数');
             }
             print_r($result['CertInfos']['CertInfo'][0]);
-        } catch(\Exception $e) {
+        } catch (\Exception $e) {
             Log::error($e->getMessage());
             $this->error($e->getMessage());
         }

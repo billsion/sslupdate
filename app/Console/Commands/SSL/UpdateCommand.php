@@ -54,20 +54,20 @@ class UpdateCommand extends Command
                     }
                 }
 
-                Log::info('--------[start]' . date('Y-m-d H:i:s') . '--------');
-                Log::info('有 ' . count($expired_soon_domains) . ' 个域名 SSL 证书将过期');
+                Log::info('--------[start]'.date('Y-m-d H:i:s').'--------');
+                Log::info('有 '.count($expired_soon_domains).' 个域名 SSL 证书将过期');
                 foreach ($expired_soon_domains as $_expired_soon_domain) {
                     // 测试
                     // $_expired_soon_domain['CertExpireTime'] = '2022-11-30T08:43:42Z';
                     $expired = strtotime($_expired_soon_domain['CertExpireTime']);
                     if (strtotime('+1 week') > $expired) { // 距离过期时间还有一周的时候更新
                         $this->update([$_expired_soon_domain['DomainName']]);
-                        Log::info($expired_soon_domains['DomainName'] . '证书已更新');
+                        Log::info($expired_soon_domains['DomainName'].'证书已更新');
                     }
                 }
-                Log::info('--------[end]' . date('Y-m-d H:i:s') . '--------');
+                Log::info('--------[end]'.date('Y-m-d H:i:s').'--------');
             }
-        } catch(\Exception $e) {
+        } catch (\Exception $e) {
             Log::error($e->getMessage());
             $this->error($e->getMessage());
         }
