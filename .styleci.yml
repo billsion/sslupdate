@@ -1,6 +1,16 @@
-php:
-  preset: laravel
-  disabled:
-    - unused_use
-js: true
-css: true
+risky: false
+version: 8.0
+preset: recommended
+tab-width: 4
+use-tabs: false
+name: "*.php"
+not-name:
+  - "*.blade.php"
+  - "_ide_helper.php"
+finder:
+  exclude:
+    - "tests"
+    - "vendor"
+    - "storage"
+    - "nova"
+    - "nova-components"
