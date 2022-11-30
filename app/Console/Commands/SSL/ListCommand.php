@@ -34,9 +34,9 @@ class ListCommand extends Command
      */
     public function handle()
     {
-        $ssl      = new SSL(env('AK'), env('SK'));
+        $ssl = new SSL(env('AK'), env('SK'));
         $keywords = $this->argument('keywords');
-        $force    = $this->option('force');
+        $force = $this->option('force');
 
         try {
             $domain_records = $ssl->list($keywords, $force ?? false);
@@ -44,7 +44,7 @@ class ListCommand extends Command
                 $this->warn('远程拉取');
             }
             $this->table(array_keys($domain_records[0]), $domain_records);
-        } catch(\Exception $e) {
+        } catch (\Exception $e) {
             Log::error($e->getMessage());
             $this->error($e->getMessage());
         }
